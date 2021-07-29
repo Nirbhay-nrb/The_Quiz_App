@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzler/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:quizzler/quiz_page.dart';
 
 class StartPage extends StatefulWidget {
   @override
@@ -8,23 +12,42 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
-  // FirebaseUser loggedInUser;
+  User loggedInUser;
+  String name1;
 
-  // void getCurrentUser() async {
-  //   try {
-  //     final user = await _auth.currentUser();
-  //     if (user != null) {
-  //       loggedInUser = user;
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
+  void getCurrentUser() {
+    try {
+      final user = _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getName() async {
+    final response = await _firestore
+        .collection('User')
+        .where('Uid', isEqualTo: loggedInUser.uid)
+        .get();
+
+    final responseData = response.docs;
+    for (var data in responseData) {
+      final name = data.data()['Name'];
+      setState(() {
+        name1 = name;
+      });
+      print(name1);
+    }
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    getCurrentUser();
+    getName();
     super.initState();
   }
 
@@ -40,7 +63,7 @@ class _StartPageState extends State<StartPage> {
             children: <Widget>[
               Container(
                 child: Text(
-                  'Welcome, name',
+                  'Welcome, $name1',
                   style: TextStyle(
                     fontSize: 30.0,
                     color: Colors.white,
