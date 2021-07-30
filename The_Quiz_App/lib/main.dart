@@ -2,11 +2,10 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:quizzler/quiz_page.dart';
-import 'package:quizzler/startpage.dart';
-import 'package:quizzler/view_score.dart';
+import 'quiz_page.dart';
+import 'startpage.dart';
+import 'view_score.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'quiz_brain.dart';
 import 'home_screen.dart';
 import 'login.dart';
 import 'register.dart';
